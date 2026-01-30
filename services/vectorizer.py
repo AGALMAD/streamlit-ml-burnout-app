@@ -1,11 +1,13 @@
+from pathlib import Path
 import joblib
-import os
-
 
 class TextVectorizer:
-    def __init__(self, path="tfidf_vectorizer.joblib"):
-        if not os.path.exists(path):
+    def __init__(self, filename="tfidf_vectorizer.joblib"):
+        path = Path(__file__).resolve().parent.parent / "models" / filename
+
+        if not path.exists():
             raise FileNotFoundError(f"No se encontró el vectorizador en {path}")
+
         self.vectorizer = joblib.load(path)
 
     def vectorize(self, texts):

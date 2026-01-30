@@ -1,29 +1,26 @@
+from pathlib import Path
 import joblib
-import os
-import json
-import numpy as np
 from services.vectorizer import TextVectorizer
 
 class TextPredictor:
-    def __init__(self, model_path="svm_calibrated_model.joblib"):
-        if not os.path.exists(model_path):
-            raise FileNotFoundError(f"No se encontró el modelo en {model_path}")
-        
-        self.model = joblib.load(model_path)
-        self.vectorizer = TextVectorizer()
-    
-    def predict(self, text):
+    def __init__(self, model_filename="svm_calibrated_model.joblib",
+                 vectorizer_filename="tfidf_vectorizer.joblib"):
 
-        # Transformar texto
+        model_path = Path(__file__).resolve().parent.parent / "models" / model_filename
+
+        if not model_path.exists():
+            raise FileNotFoundError(f"No se encontró el modelo en {model_path}")
+
+        self.model = joblib.load(model_path)
+        self.vectorizer = TextVectorizer(vectorizer_filename)
+
+    def predict(self, text):
         X_input = self.vectorizer.vectorize(text)
 
-        # Predicción
         pred_class = self.model.predict(X_input)[0]
         pred_proba = self.model.predict_proba(X_input).max()
 
-        # Crear JSON
-        result = {
+        return {
             "prediction": str(pred_class),
-            "probability": float(pred_proba) if pred_proba is not None else None
+            "probability": float(pred_proba)
         }
-        return json.dumps(result)

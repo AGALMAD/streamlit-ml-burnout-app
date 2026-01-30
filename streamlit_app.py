@@ -4,33 +4,25 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import ollama
+from services.predictor import TextPredictor
 
-# 1. Page Configuration
+# Page Configuration
 st.set_page_config(page_title="MindGuard AI", layout="wide", page_icon="🧠")
 
-# 2. Custom CSS
-try:
-    with open("styles/main.css") as f:
+# Custom CSS
+with open("styles/main.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-except FileNotFoundError:
-    # Fallback if CSS file is missing
-    pass
 
-# 3. Initialize Ollama Client for Docker
+
+# Load Pre-trained Model
+model = TextPredictor()
+
+
+# Initialize Ollama Client for Docker
 # 'host.docker.internal' allows the container to talk to Ollama on your host machine
-client = ollama.Client(host='http://host.docker.internal:11434')
+#client = ollama.Client(host='http://host.docker.internal:11434')
 
-# 4. Model Loading
-@st.cache_resource
-def load_model():
-    try:
-        return joblib.load('modelo_burnout_pipeline.pkl')
-    except:
-        return None
 
-model = load_model()
-CRITICAL_WORDS = ['suicide', 'kill', 'burnout', 'exhausted', 'hopeless', 'quit', 'resign', 'death']
-EXTRA_POINTS = 15
 
 # --- HEADER ---
 st.markdown('<h1 class="hero-title">MindGuard AI</h1>', unsafe_allow_html=True)
@@ -58,7 +50,7 @@ with col_center:
         st.markdown("<br>", unsafe_allow_html=True) 
         analyze_btn = st.button("Start Analysis")
 
-    # --- ANALYSIS OUTPUT ---
+   # --- ANALYSIS OUTPUT ---
     with st.container(border=True):
         st.markdown("### 📊 Insight Dashboard")
         
@@ -69,54 +61,67 @@ with col_center:
                     <p>Analysis results will appear here</p>
                 </div>
             """, unsafe_allow_html=True)
+
         else:
             if not user_input.strip():
                 st.warning("Please provide some text to analyze.")
+
             elif model is None:
-                st.error("Error: Model file 'modelo_burnout_pipeline.pkl' not found.")
+                st.error("Error: Model not loaded.")
+
             else:
-                try:
-                    # Model Inference
-                    probs = model.predict_proba([user_input])
-                    risk_prob = probs[0][1]
-                    
-                    detected = [w for w in CRITICAL_WORDS if w in user_input.lower()]
-                    final_score = min(int(risk_prob * 100) + (len(detected) * EXTRA_POINTS), 100)
-                    
-                    # Gauge Chart
-                    fig = go.Figure(go.Indicator(
-                        mode = "gauge+number",
-                        value = final_score,
-                        domain = {'x': [0, 1], 'y': [0, 1]},
-                        gauge = {
-                            'axis': {'range': [None, 100], 'tickwidth': 1},
-                            'bar': {'color': "#764ba2"},
-                            'steps': [
-                                {'range': [0, 40], 'color': '#00b894'},
-                                {'range': [40, 75], 'color': '#fdcb6e'},
-                                {'range': [75, 100], 'color': '#ff7675'}
-                            ],
-                        }
-                    ))
-                    fig.update_layout(height=180, margin=dict(l=20, r=20, t=30, b=20), paper_bgcolor="rgba(0,0,0,0)")
-                    st.plotly_chart(fig, use_container_width=True)
+                # Analyze Input Text
+                model_output = model.predict(user_input)
 
-                    st.markdown("---")
-                    if final_score < 40:
-                        st.success("**Analysis:** Healthy / Balanced State")
-                        st.write("Linguistic patterns suggest a stable professional well-being.")
-                    elif final_score < 75:
-                        st.warning("**Analysis:** Moderate Stress Detected")
-                        st.write("Signs of tension found. Consider re-evaluating your workload.")
-                    else:
-                        st.error("**Analysis:** High Risk of Burnout")
-                        st.write("Language patterns strongly correlate with chronic exhaustion.")
-                    
-                    if detected:
-                        st.caption(f"Risk indicators found: {', '.join(detected)}")
+                prediction = int(model_output["prediction"])
+                confidence = model_output["probability"]
 
-                except Exception as e:
-                    st.error(f"Analysis failed: {e}")
+                # Convert to burnout risk percentage
+                if prediction == 1:
+                    burnout_risk = confidence * 100
+                else:
+                    burnout_risk = (1 - confidence) * 100
+
+                # Chart Visualization
+                fig = go.Figure(go.Indicator(
+                    mode="gauge+number",
+                    value=burnout_risk,
+                    number={"suffix": "%"},
+                    title={"text": "Burnout Risk"},
+                    gauge={
+                        "axis": {"range": [0, 100]},
+                        "bar": {"color": "#3498db"},
+                        "steps": [
+                            {"range": [0, 40], "color": "#2ecc71"},
+                            {"range": [40, 75], "color": "#f1c40f"},
+                            {"range": [75, 100], "color": "#e74c3c"}
+                        ]
+                    }
+                ))
+
+                fig.update_layout(
+                    height=240,
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    font={"color": "#2c3e50"}
+                )
+
+                st.plotly_chart(fig, use_container_width=True)
+
+                # Textual Interpretation
+                st.markdown("---")
+
+                if burnout_risk < 40:
+                    st.success("🟢 **Low risk of burnout**")
+                    st.write("Linguistic patterns indicate a healthy and balanced state.")
+
+                elif burnout_risk < 75:
+                    st.warning("🟡 **Moderate risk of burnout**")
+                    st.write("Some stress indicators detected. Consider adjusting workload or routines.")
+
+                else:
+                    st.error("🔴 **High risk of burnout**")
+                    st.write("Strong linguistic signals associated with chronic exhaustion detected.")
 
 # === COLUMN 3: AI CHATBOT (OLLAMA) ===
 with col_right:
