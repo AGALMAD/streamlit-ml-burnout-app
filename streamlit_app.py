@@ -128,19 +128,22 @@ with col_right:
         if "messages" not in st.session_state:
             st.session_state.messages = [{"role": "assistant", "content": "Hello! I'm your MindGuard assistant. How are you feeling today?"}]
 
-        # Display history
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+        # Create a container for messages to keep them above the input
+        messages_container = st.container(height=300)
+        with messages_container:
+            # Display history
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
 
         # Chat Input
         if prompt := st.chat_input("Type your message...", key="chat_input_floating"):
             st.session_state.messages.append({"role": "user", "content": prompt})
-            with st.chat_message("user"):
+            with messages_container.chat_message("user"):
                 st.markdown(prompt)
 
             # Response Logic with Ollama (Phi-3)
-            with st.chat_message("assistant"):
+            with messages_container.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
 
@@ -173,7 +176,7 @@ with col_right:
             st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 # --- FOOTER ---
-st.markdown("<br><br>---", unsafe_allow_html=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
 st.markdown("""
     <div style='text-align: center; color: #95a5a6; font-size: 0.9rem;'>
         <b>MindGuard AI</b> • 2026 Academic Research Project <br>
