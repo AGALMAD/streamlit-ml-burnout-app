@@ -1,7 +1,9 @@
 /* Import Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
-html, body, [class*="css"] {
+html,
+body,
+[class*="css"] {
     font-family: 'Inter', sans-serif;
     background-color: #f4f7f9;
     color: #2c3e50;
@@ -23,7 +25,7 @@ textarea {
     background-color: white !important;
     border-top: 8px solid #3498db !important;
     border-radius: 15px !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important;
     padding: 30px !important;
     margin-bottom: 2rem !important;
 }
@@ -34,6 +36,8 @@ textarea {
     padding: 0.5rem 0;
     background: linear-gradient(90deg, #2c3e50, #3498db);
     -webkit-background-clip: text;
+    background-clip: text;
+    /* standard property for compatibility */
     -webkit-text-fill-color: transparent;
     font-size: 3rem;
     font-weight: 800;
@@ -56,7 +60,6 @@ textarea {
 
 .stButton button {
     width: 100% !important;
-    max-width: 400px;
     border-radius: 50px;
     background: linear-gradient(45deg, #FF416C, #FF4B2B);
     color: white;
@@ -73,6 +76,7 @@ textarea {
 .stButton button:hover {
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 15px 25px rgba(255, 75, 43, 0.4);
+    color: white !important;
 }
 
 /* Bottom info boxes */
@@ -82,7 +86,7 @@ textarea {
     padding: 20px;
     border-radius: 10px;
     border-left: 5px solid #2ecc71;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
     transition: transform 0.2s;
     margin-bottom: 1rem;
 }
@@ -96,4 +100,63 @@ textarea {
     font-weight: 700;
     margin-bottom: 10px;
     font-size: 1.1rem;
+}
+
+/* Floating Chatbot Button - Now Static/Grid Positioned */
+[data-testid="stPopover"] {
+    /* position: fixed; removed for grid layout */
+    /* bottom: 30px; removed */
+    /* right: 30px; removed */
+    /* z-index: 99999; removed */
+    display: flex !important;
+    justify-content: flex-end !important;
+    /* Align to right of container */
+}
+
+/* Style the button inside stPopover */
+[data-testid="stPopover"] button {
+    border-radius: 50% !important;
+    width: 60px !important;
+    height: 60px !important;
+    padding: 0 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    background-color: #3498db !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24px' height='24px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M12 2c-4.42 0-8 3.58-8 8v1h-1c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h1v1c0 4.42 3.58 8 8 8s8-3.58 8-8v-1h1c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1h-1v-1c0-4.42-3.58-8-8-8zm-3.5 9c.83 0 1.5.67 1.5 1.5S9.33 14 8.5 14 7 13.33 7 12.5 7.67 11 8.5 11zm7 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 30px !important;
+    border: none !important;
+    color: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    /* Ensure content doesn't spill */
+}
+
+[data-testid="stPopover"] button:hover {
+    background-color: #2980b9 !important;
+    transform: scale(1.1) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='24px' height='24px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M12 2c-4.42 0-8 3.58-8 8v1h-1c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h1v1c0 4.42 3.58 8 8 8s8-3.58 8-8v-1h1c.55 0 1-.45 1-1v-6c0-.55-.45-1-1-1h-1v-1c0-4.42-3.58-8-8-8zm-3.5 9c.83 0 1.5.67 1.5 1.5S9.33 14 8.5 14 7 13.33 7 12.5 7.67 11 8.5 11zm7 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5z'/%3E%3C/svg%3E") !important;
+    /* Keep icon on hover */
+    background-size: 30px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+/* 
+   Popover Content Styling - Attempt to make it a RIGHT SIDEBAR/DRAWER 
+   Since we can't fully control the popover's internal absolute positioning from here easily without JS,
+   we will style the content box to be large and aligned.
+*/
+div[data-testid="stPopoverBody"] {
+    border: 2px solid #3498db !important;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px !important;
+    width: 400px !important;
+    max-height: 80vh !important;
+    /* Optional: If we could target the container, we would set right: 20px. 
+       But Streamlit popover positioning is done inline by the framework.
+       We rely on the button being right-aligned, so the popover usually opens nearby.
+    */
 }
