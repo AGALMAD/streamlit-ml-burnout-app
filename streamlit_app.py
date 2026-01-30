@@ -3,18 +3,24 @@ import joblib
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-
+import ollama
 
 # 1. Page Configuration
 st.set_page_config(page_title="MindGuard AI", layout="wide", page_icon="🧠")
 
 # 2. Custom CSS
-with open("styles/main.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+try:
+    with open("styles/main.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+except FileNotFoundError:
+    # Fallback if CSS file is missing
+    pass
 
+# 3. Initialize Ollama Client for Docker
+# 'host.docker.internal' allows the container to talk to Ollama on your host machine
+client = ollama.Client(host='http://host.docker.internal:11434')
 
-
-# 3. Model Loading
+# 4. Model Loading
 @st.cache_resource
 def load_model():
     try:
@@ -30,12 +36,10 @@ EXTRA_POINTS = 15
 st.markdown('<h1 class="hero-title">MindGuard AI</h1>', unsafe_allow_html=True)
 st.markdown('<p class="hero-subtitle">Decoding Workplace Stress through Linguistic Intelligence</p>', unsafe_allow_html=True)
 
-# --- DASHBOARD LAYOUT (Centered) ---
+# --- DASHBOARD LAYOUT ---
 col_left, col_center, col_right = st.columns([1, 1.5, 1], gap="large")
 
-# === COLUMN 1: LEFT SIDEBAR (INFO) ===
 with col_left:
-    # Spacer column as requested
     st.markdown("<br>", unsafe_allow_html=True)
 
 # === COLUMN 2: CENTER STAGE (MAIN APP) ===
@@ -52,11 +56,9 @@ with col_center:
         )
 
         st.markdown("<br>", unsafe_allow_html=True) 
-        
-        # --- ACTION BUTTON ---
         analyze_btn = st.button("Start Analysis")
 
-    # --- BLOCK 2: OUTPUT ---
+    # --- ANALYSIS OUTPUT ---
     with st.container(border=True):
         st.markdown("### 📊 Insight Dashboard")
         
@@ -87,22 +89,18 @@ with col_center:
                         value = final_score,
                         domain = {'x': [0, 1], 'y': [0, 1]},
                         gauge = {
-                            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#2c3e50"},
-                            'bar': {'color': "#3498db"},
-                            'bgcolor': "white",
-                            'borderwidth': 2,
-                            'bordercolor': "#ecf0f1",
+                            'axis': {'range': [None, 100], 'tickwidth': 1},
+                            'bar': {'color': "#764ba2"},
                             'steps': [
-                                {'range': [0, 40], 'color': '#2ecc71'},
-                                {'range': [40, 75], 'color': '#f1c40f'},
-                                {'range': [75, 100], 'color': '#e74c3c'}
+                                {'range': [0, 40], 'color': '#00b894'},
+                                {'range': [40, 75], 'color': '#fdcb6e'},
+                                {'range': [75, 100], 'color': '#ff7675'}
                             ],
                         }
                     ))
-                    fig.update_layout(height=180, margin=dict(l=20, r=20, t=30, b=20), paper_bgcolor="rgba(0,0,0,0)", font={'color': "#2c3e50", 'family': "Inter"})
+                    fig.update_layout(height=180, margin=dict(l=20, r=20, t=30, b=20), paper_bgcolor="rgba(0,0,0,0)")
                     st.plotly_chart(fig, use_container_width=True)
 
-                    # Result Summary
                     st.markdown("---")
                     if final_score < 40:
                         st.success("**Analysis:** Healthy / Balanced State")
@@ -120,64 +118,68 @@ with col_center:
                 except Exception as e:
                     st.error(f"Analysis failed: {e}")
 
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("---")
-st.markdown("""
-    <div style='text-align: center; color: #95a5a6; font-size: 0.9rem;'>
-        <b>MindGuard AI</b> • 2026 Academic Research Project <br>
-        <i>Note: This tool provides general insights based on text patterns and is not a clinical assessment.</i>
-    </div>
-""", unsafe_allow_html=True)
-
-# === COLUMN 3: RIGHT SPACER / CHATBOT LOCATION ===
+# === COLUMN 3: AI CHATBOT (OLLAMA) ===
 with col_right:
-    # Vertical Spacer to push chatbot down to match dashboard alignment
-    st.markdown("<br>" * 15, unsafe_allow_html=True)
-    
-    # === CHATBOT UI ===
-    with st.popover(" ", use_container_width=False):
-        st.markdown("### 🤖 Assistant")
-        st.caption("Chat with our AI.")
+    with st.popover("💬 Open Assistant", use_container_width=True):
+        st.markdown("### 🤖 Wellness Assistant")
+        st.caption("Chat with our AI for burnout prevention tips.")
         
         # Initialize chat history
         if "messages" not in st.session_state:
-            st.session_state.messages = [{"role": "assistant", "content": "Hello! I'm here to listen. How are you feeling right now?"}]
+            st.session_state.messages = [{"role": "assistant", "content": "Hello! I'm your MindGuard assistant. How are you feeling today?"}]
 
-        # Display chat messages from history
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.markdown(message["content"])
+        # Create a container for messages to keep them above the input
+        messages_container = st.container(height=300)
+        with messages_container:
+            # Display history
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
 
-        # React to user input
-        if prompt := st.chat_input("Message...", key="chat_input_floating"):
-            # Add user message to state
+        # Chat Input
+        if prompt := st.chat_input("Type your message...", key="chat_input_floating"):
             st.session_state.messages.append({"role": "user", "content": prompt})
-            # Display user message instantly
-            st.chat_message("user").markdown(prompt)
+            with messages_container.chat_message("user"):
+                st.markdown(prompt)
 
-            # --- RESPONSE LOGIC ---
-            with st.chat_message("assistant"):
+            # Response Logic with Ollama (Phi-3)
+            with messages_container.chat_message("assistant"):
                 message_placeholder = st.empty()
                 full_response = ""
 
-                # RESPONSE LOGIC (Rule-based)
-                import time
-                time.sleep(0.5) 
-                p_lower = prompt.lower()
-                if "stress" in p_lower or "overwhelmed" in p_lower:
-                    full_response = "I understand. High stress levels can be paralyzing. Have you tried the 4-7-8 breathing technique?"
-                elif "sleep" in p_lower or "tired" in p_lower:
-                    full_response = "Exhaustion often exacerbates burnout. Are you able to disconnect from screens an hour before bed?"
-                elif "deadlines" in p_lower or "work" in p_lower:
-                    full_response = "Workload pressure is real. Breaking tasks into tiny, 5-minute chunks might help you regain control."
-                elif "yes" in p_lower:
-                    full_response = "That's great! Small steps lead to big changes. How did that make you feel?"
-                elif "no" in p_lower:
-                    full_response = "That's okay. Everyone finds their own path. What usually helps you disconnect?"
-                else:
-                    full_response = "I'm listening. Tell me more about how that affects your day-to-day work."
-                
-                message_placeholder.markdown(full_response)
+                # System Prompt for burnout tips
+                system_prompt = (
+                    "You are a professional workplace wellness coach. Your goal is to provide "
+                    "short, empathetic, and actionable tips to reduce burnout and stress. "
+                    "Suggest techniques like Pomodoro, box breathing, digital detox, or setting boundaries. "
+                    "Keep responses concise and supportive."
+                )
 
-            # Add assistant response to state
+                try:
+                    # Request to the local Ollama instance
+                    response = client.chat(
+                        model='phi3',
+                        messages=[{'role': 'system', 'content': system_prompt}] + st.session_state.messages,
+                        stream=True,
+                    )
+
+                    for chunk in response:
+                        full_response += chunk['message']['content']
+                        message_placeholder.markdown(full_response + "▌")
+                    
+                    message_placeholder.markdown(full_response)
+                except Exception as e:
+                    st.error("Connection Error: Make sure Ollama is running on your host.")
+                    full_response = "I'm having trouble connecting to my brain right now. Please try again later."
+                    message_placeholder.markdown(full_response)
+
             st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+# --- FOOTER ---
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("""
+    <div style='text-align: center; color: #95a5a6; font-size: 0.9rem;'>
+        <b>MindGuard AI</b> • 2026 Academic Research Project <br>
+        <i>Note: This tool provides general insights and is not a clinical assessment.</i>
+    </div>
+""", unsafe_allow_html=True)
