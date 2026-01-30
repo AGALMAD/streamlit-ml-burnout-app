@@ -87,15 +87,15 @@ with col_center:
                         value = final_score,
                         domain = {'x': [0, 1], 'y': [0, 1]},
                         gauge = {
-                            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#2c3e50"},
-                            'bar': {'color': "#3498db"},
+                            'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#2d3748"},
+                            'bar': {'color': "#764ba2"}, # Premium Purple
                             'bgcolor': "white",
                             'borderwidth': 2,
-                            'bordercolor': "#ecf0f1",
+                            'bordercolor': "#f8f9fe",
                             'steps': [
-                                {'range': [0, 40], 'color': '#2ecc71'},
-                                {'range': [40, 75], 'color': '#f1c40f'},
-                                {'range': [75, 100], 'color': '#e74c3c'}
+                                {'range': [0, 40], 'color': '#00b894'}, # Mint
+                                {'range': [40, 75], 'color': '#fdcb6e'}, # Sun
+                                {'range': [75, 100], 'color': '#ff7675'} # Coral
                             ],
                         }
                     ))
@@ -131,8 +131,7 @@ st.markdown("""
 
 # === COLUMN 3: RIGHT SPACER / CHATBOT LOCATION ===
 with col_right:
-    # Vertical Spacer to push chatbot down to match dashboard alignment
-    st.markdown("<br>" * 15, unsafe_allow_html=True)
+    # (Chatbot is now fixed position, but we keep the column structure for layout balance)
     
     # === CHATBOT UI ===
     with st.popover(" ", use_container_width=False):
