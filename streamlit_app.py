@@ -30,34 +30,13 @@ EXTRA_POINTS = 15
 st.markdown('<h1 class="hero-title">MindGuard AI</h1>', unsafe_allow_html=True)
 st.markdown('<p class="hero-subtitle">Decoding Workplace Stress through Linguistic Intelligence</p>', unsafe_allow_html=True)
 
-# --- DASHBOARD LAYOUT (3 Columns) ---
-col_left, col_center, col_right = st.columns([1, 2, 1], gap="large")
+# --- DASHBOARD LAYOUT (Centered) ---
+col_left, col_center, col_right = st.columns([1, 1.5, 1], gap="large")
 
 # === COLUMN 1: LEFT SIDEBAR (INFO) ===
 with col_left:
-    st.markdown("### 📚 Resources")
-    st.markdown("""
-        <div class="bottom-info-box">
-            <div class="bottom-info-title">🛡️ Project Info</div>
-            This AI analyzes linguistic patterns to identify early signs of burnout.
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-        <div class="bottom-info-box" style="border-left-color: #f1c40f;">
-            <div class="bottom-info-title">💡 Quick Tips</div>
-            • Set boundaries<br>
-            • Take micro-breaks<br>
-            • Prioritize sleep
-        </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("""
-        <div class="bottom-info-box" style="border-left-color: #3498db;">
-            <div class="bottom-info-title">🚀 Goal</div>
-            "Empowering Wellness through data-driven empathy."
-        </div>
-    """, unsafe_allow_html=True)
+    # Spacer column as requested
+    st.markdown("<br>", unsafe_allow_html=True)
 
 # === COLUMN 2: CENTER STAGE (MAIN APP) ===
 with col_center:
@@ -141,9 +120,22 @@ with col_center:
                 except Exception as e:
                     st.error(f"Analysis failed: {e}")
 
-# === COLUMN 3: RIGHT SIDEBAR (CHATBOT) ===
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("---")
+st.markdown("""
+    <div style='text-align: center; color: #95a5a6; font-size: 0.9rem;'>
+        <b>MindGuard AI</b> • 2026 Academic Research Project <br>
+        <i>Note: This tool provides general insights based on text patterns and is not a clinical assessment.</i>
+    </div>
+""", unsafe_allow_html=True)
+
+# === COLUMN 3: RIGHT SPACER / CHATBOT LOCATION ===
 with col_right:
-    with st.container(border=True):
+    # Vertical Spacer to push chatbot down to match dashboard alignment
+    st.markdown("<br>" * 15, unsafe_allow_html=True)
+    
+    # === CHATBOT UI ===
+    with st.popover(" ", use_container_width=False):
         st.markdown("### 🤖 Assistant")
         st.caption("Chat with our AI.")
         
@@ -157,7 +149,7 @@ with col_right:
                 st.markdown(message["content"])
 
         # React to user input
-        if prompt := st.chat_input("Message...", key="chat_input_right"):
+        if prompt := st.chat_input("Message...", key="chat_input_floating"):
             # Add user message to state
             st.session_state.messages.append({"role": "user", "content": prompt})
             # Display user message instantly
@@ -189,13 +181,3 @@ with col_right:
 
             # Add assistant response to state
             st.session_state.messages.append({"role": "assistant", "content": full_response})
-
-
-st.markdown("<br><br>", unsafe_allow_html=True)
-st.markdown("---")
-st.markdown("""
-    <div style='text-align: center; color: #95a5a6; font-size: 0.9rem;'>
-        <b>MindGuard AI</b> • 2026 Academic Research Project <br>
-        <i>Note: This tool provides general insights based on text patterns and is not a clinical assessment.</i>
-    </div>
-""", unsafe_allow_html=True)
