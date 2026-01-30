@@ -20,7 +20,7 @@ model = TextPredictor()
 
 # Initialize Ollama Client for Docker
 # 'host.docker.internal' allows the container to talk to Ollama on your host machine
-#client = ollama.Client(host='http://host.docker.internal:11434')
+client = ollama.Client(host='http://host.docker.internal:11434')
 
 
 
@@ -50,7 +50,7 @@ with col_center:
         st.markdown("<br>", unsafe_allow_html=True) 
         analyze_btn = st.button("Start Analysis")
 
-   # --- ANALYSIS OUTPUT ---
+    # --- ANALYSIS OUTPUT ---
     with st.container(border=True):
         st.markdown("### 📊 Insight Dashboard")
         
