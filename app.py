@@ -3,14 +3,12 @@ import joblib
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from openai import OpenAI
+
 
 # 1. Page Configuration
 st.set_page_config(page_title="MindGuard AI", layout="wide", page_icon="🧠")
 
-# --- SIDEBAR CONFIGURATION ---
-st.sidebar.title("⚙️ Settings")
-api_key = st.sidebar.text_input("OpenAI API Key", type="password", help="Enter your OpenAI API key to enable the AI assistant.")
+
 
 # 2. Advanced CSS
 st.markdown("""
@@ -271,54 +269,24 @@ with col_right:
                 message_placeholder = st.empty()
                 full_response = ""
 
-                # OPTION A: OPENAI API
-                if api_key:
-                    try:
-                        client = OpenAI(api_key=api_key)
-                        messages_for_api = [
-                            {"role": "system", "content": "You are MindGuard, a compassionate and empathetic AI assistant specialized in workplace mental health. Keep answers concise, supportive, and safe. Do not provide medical diagnoses."}
-                        ] + [
-                            {"role": m["role"], "content": m["content"]}
-                            for m in st.session_state.messages
-                        ]
-
-                        stream = client.chat.completions.create(
-                            model="gpt-3.5-turbo",
-                            messages=messages_for_api,
-                            stream=True,
-                        )
-                        
-                        for chunk in stream:
-                            if chunk.choices[0].delta.content is not None:
-                                full_response += chunk.choices[0].delta.content
-                                message_placeholder.markdown(full_response + "▌")
-                        
-                        message_placeholder.markdown(full_response)
-
-                    except Exception as e:
-                        st.error(f"Error: {e}")
-                        full_response = "I'm having trouble connecting. Please check your API Key."
-                        message_placeholder.markdown(full_response)
-
-                # OPTION B: FALLBACK MOCK (Rule-based)
+                # RESPONSE LOGIC (Rule-based)
+                import time
+                time.sleep(0.5) 
+                p_lower = prompt.lower()
+                if "stress" in p_lower or "overwhelmed" in p_lower:
+                    full_response = "I understand. High stress levels can be paralyzing. Have you tried the 4-7-8 breathing technique?"
+                elif "sleep" in p_lower or "tired" in p_lower:
+                    full_response = "Exhaustion often exacerbates burnout. Are you able to disconnect from screens an hour before bed?"
+                elif "deadlines" in p_lower or "work" in p_lower:
+                    full_response = "Workload pressure is real. Breaking tasks into tiny, 5-minute chunks might help you regain control."
+                elif "yes" in p_lower:
+                    full_response = "That's great! Small steps lead to big changes. How did that make you feel?"
+                elif "no" in p_lower:
+                    full_response = "That's okay. Everyone finds their own path. What usually helps you disconnect?"
                 else:
-                    import time
-                    time.sleep(0.5) 
-                    p_lower = prompt.lower()
-                    if "stress" in p_lower or "overwhelmed" in p_lower:
-                        full_response = "I understand. High stress levels can be paralyzing. Have you tried the 4-7-8 breathing technique?"
-                    elif "sleep" in p_lower or "tired" in p_lower:
-                        full_response = "Exhaustion often exacerbates burnout. Are you able to disconnect from screens an hour before bed?"
-                    elif "deadlines" in p_lower or "work" in p_lower:
-                        full_response = "Workload pressure is real. Breaking tasks into tiny, 5-minute chunks might help you regain control."
-                    elif "yes" in p_lower:
-                        full_response = "That's great! Small steps lead to big changes. How did that make you feel?"
-                    elif "no" in p_lower:
-                        full_response = "That's okay. Everyone finds their own path. What usually helps you disconnect?"
-                    else:
-                        full_response = "I'm listening. Tell me more about how that affects your day-to-day work."
-                    
-                    message_placeholder.markdown(full_response)
+                    full_response = "I'm listening. Tell me more about how that affects your day-to-day work."
+                
+                message_placeholder.markdown(full_response)
 
             # Add assistant response to state
             st.session_state.messages.append({"role": "assistant", "content": full_response})
