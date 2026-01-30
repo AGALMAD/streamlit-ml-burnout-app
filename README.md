@@ -13,7 +13,6 @@
 
 - **📊 Linguistic Analysis**: Detects probability of burnout based on text sentiment and keyword patterns.
 - **🤖 AI Wellness Assistant**: Validated advice from a local LLM (Ollama/Phi-3) tailored to your stress levels.
-- **📉 Visual Dashboard**: Interactive gauge charts and risk scores powered by Plotly.
 - **🔒 Privacy-First**: All AI processing happens locally on your machine using Docker and Ollama.
 
 ## 🛠️ Tech Stack
