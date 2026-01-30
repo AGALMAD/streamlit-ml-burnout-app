@@ -65,7 +65,7 @@ Since the AI model runs on your host machine, we need to allow the Docker contai
 
 1. **Clone the Repository**
    ```bash
-   git clone <your-repo-link>
+   git clone <https://github.com/AGALMAD/streamlit-ml-burnout-app>
    cd streamlit-ml-burnout-app
    ```
 
