@@ -8,112 +8,11 @@ import plotly.graph_objects as go
 # 1. Page Configuration
 st.set_page_config(page_title="MindGuard AI", layout="wide", page_icon="🧠")
 
+# 2. Custom CSS
+with open("styles/main.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-# 2. Advanced CSS
-st.markdown("""
-    <style>
-    /* Import Google Font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
-        background-color: #f4f7f9;
-        color: #2c3e50;
-    }
-
-    /* Disable text area resize */
-    textarea {
-        resize: none !important;
-    }
-
-    /* Reduce default top padding of Streamlit app */
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
-    }
-
-    /* Styled Containers (The Vertical Blocks) */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: white !important;
-        border-top: 8px solid #3498db !important;
-        border-radius: 15px !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.05) !important;
-        padding: 30px !important;
-        margin-bottom: 2rem !important;
-    }
-
-    /* Main Title Animation Look */
-    .hero-title {
-        text-align: center;
-        padding: 0.5rem 0;
-        background: linear-gradient(90deg, #2c3e50, #3498db);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
-    }
-
-    .hero-subtitle {
-        text-align: center;
-        color: #7f8c8d;
-        font-size: 1.1rem;
-        margin-bottom: 3rem;
-    }
-
-    /* Action Button Container */
-    .stButton {
-        display: flex;
-        justify-content: center;
-        padding: 1rem 0; 
-    }
-
-    /* Modern & Striking Button */
-    .stButton button {
-        width: 100% !important;
-        max-width: 400px;
-        border-radius: 50px;
-        background: linear-gradient(45deg, #FF416C, #FF4B2B);
-        color: white;
-        font-weight: 800;
-        font-size: 1.2rem;
-        height: 3.5rem;
-        border: none;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.3);
-    }
-
-    .stButton button:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 15px 25px rgba(255, 75, 43, 0.4);
-    }
-    
-    /* Bottom Info Section Styles */
-    .bottom-info-box {
-        background-color: white;
-        color: #2c3e50; 
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #2ecc71;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        transition: transform 0.2s;
-        margin-bottom: 1rem;
-    }
-    .bottom-info-box:hover {
-        transform: scale(1.02);
-    }
-    
-    .bottom-info-title {
-        color: #2c3e50;
-        font-weight: 700;
-        margin-bottom: 10px;
-        font-size: 1.1rem;
-    }
-    </style>
-    """, unsafe_allow_html=True)
 
 # 3. Model Loading
 @st.cache_resource
