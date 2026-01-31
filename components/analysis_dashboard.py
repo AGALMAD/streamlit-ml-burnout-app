@@ -51,11 +51,11 @@ def render_analysis(model, user_input, analyze_btn):
 
         chart_placeholder = st.empty()
         
-        # Determine step size and total animation frames
+
         target_value = int(burnout_risk)
         step = 2 if target_value > 50 else 1
         
-        # Only animate if it's a new analysis run
+
         if "last_risk" not in st.session_state or st.session_state.last_risk != burnout_risk:
             st.session_state.last_risk = burnout_risk
             current_val = 0
@@ -65,7 +65,7 @@ def render_analysis(model, user_input, analyze_btn):
                 current_val += step
                 time.sleep(0.01)
         
-        # Ensure final value is set correctly
+
         fig.update_traces(value=burnout_risk)
         chart_placeholder.plotly_chart(fig, use_container_width=True)
 

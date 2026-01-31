@@ -2,8 +2,7 @@
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
-![Ollama](https://img.shields.io/badge/Ollama-AI-yellow)
+![Groq](https://img.shields.io/badge/Groq-AI-f55036)
 
 **MindGuard AI** is a workplace stress analysis tool that bridges the gap between traditional machine learning and generative AI. It combines linguistic analysis to detect burnout risks with an empathetic AI assistant to provide actionable wellness tips.
 
@@ -11,69 +10,65 @@
 
 ## ✨ Features
 
-- **📊 Linguistic Analysis**: Detects probability of burnout based on text sentiment and keyword patterns.
-- **🤖 AI Wellness Assistant**: Validated advice from a local LLM (Ollama/Phi-3) tailored to your stress levels.
-- **🔒 Privacy-First**: All AI processing happens locally on your machine using Docker and Ollama.
+- **📊 Linguistic Analysis**: Detects probability of burnout based on text sentiment and keyword patterns using a trained scikit-learn model.
+- **🤖 AI Wellness Assistant**: Powered by **Groq** (Llama 3), this assistant provides instant, actionable advice tailored to your needs.
+- **⚡ Fast Inference**: Utilizes Groq's LPU™ Inference Engine for near-instantaneous responses.
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: Streamlit
 - **ML Engine**: Scikit-learn (Pipeline with TF-IDF & Logistic Regression)
-- **GenAI**: Ollama (Phi-3 Mini)
-- **Containerization**: Docker & Docker Compose
+- **GenAI**: Groq API (Llama-3.3-70b-versatile)
+- **Visualization**: Plotly
 
 ---
 
 ## 📋 Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have:
 
-1. **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: For running the application container.
-2. **[Ollama](https://ollama.com/)**: For the local AI chatbot.
+1. **Python 3.9+** installed.
+2. A **[Groq API Key](https://console.groq.com/keys)**.
 
 ---
 
-## � Setup Guide
+## 🚀 Setup Guide
 
-### 1. Configure Ollama (The AI Brain)
+### 1. Clone the Repository
+```bash
+git clone <https://github.com/AGALMAD/streamlit-ml-burnout-app>
+cd streamlit-ml-burnout-app
+```
 
-Since the AI model runs on your host machine, we need to allow the Docker container to communicate with it.
+### 2. Install Dependencies
+It is recommended to use a virtual environment:
+```bash
+python -m venv venv
+# Windows
+.\venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+```
 
-1. **Download the Model**  
-   Open your terminal and pull the lightweight Phi-3 model:
-   ```bash
-   ollama pull phi3
-   ```
+Install the required packages:
+```bash
+pip install -r requirements.txt
+```
 
-2. **Set Environment Variable**  
-   To allow external connections (from Docker), set `OLLAMA_HOST`:
+### 3. Configure Secrets
+Create a `.streamlit/secrets.toml` file in the root directory and add your Groq API key:
 
-   - **Windows**: 
-     1. Search for "Edit the system environment variables".
-     2. Click **Environment Variables** > **User variables** > **New**.
-     3. Name: `OLLAMA_HOST`, Value: `0.0.0.0`
-   
-   - **Mac/Linux**:
-     ```bash
-     export OLLAMA_HOST=0.0.0.0
-     ```
+**File:** `.streamlit/secrets.toml`
+```toml
+GROQ_API_KEY = "gsk_..."
+```
 
-3. **Restart Ollama**  
-   Quit the Ollama application from the taskbar and open it again to apply the changes.
+> **Note:** Do not commit this file to version control.
 
-### 2. Launch the Application
-
-1. **Clone the Repository**
-   ```bash
-   git clone <https://github.com/AGALMAD/streamlit-ml-burnout-app>
-   cd streamlit-ml-burnout-app
-   ```
-
-2. **Run with Docker Compose**
-   ```bash
-   docker compose up --build
-   ```
-   *This will install dependencies and start the server on port 8501.*
+### 4. Run the Application
+```bash
+streamlit run streamlit_app.py
+```
 
 ---
 
@@ -85,7 +80,7 @@ Since the AI model runs on your host machine, we need to allow the Docker contai
    - Type or paste descriptive text about your workday/feelings.
    - Click **Start Analysis** to get a burnout risk score.
 4. **Right Panel (Assistant)**: 
-   - Click the **💬 Open Assistant** button.
+   - Click the **💬 Open Wellness Assistant** button.
    - Chat with the AI to get stress relief tips (e.g., "Give me a 5-minute breathing exercise").
 
 ---
@@ -94,9 +89,9 @@ Since the AI model runs on your host machine, we need to allow the Docker contai
 
 | Issue | Solution |
 |-------|----------|
-| **Connection Error** | Ensure `OLLAMA_HOST` is set to `0.0.0.0` and Ollama is running. The app uses `host.docker.internal` to connect. |
-| **Model Not Found** | Verify `modelo_burnout_pipeline.pkl` exists in the root directory. |
-| **Port Conflict** | If port 8501 is busy, change the mapping in `docker-compose.yml` (e.g., `8502:8501`). |
+| **Missing API Key** | Ensure you have created `.streamlit/secrets.toml` with the correct `GROQ_API_KEY`. |
+| **Model Not Found** | Verify `modelo_burnout_pipeline.pkl` exists in the `models/` directory or root, depending on your structure. |
+| **Dependencies** | Run `pip install -r requirements.txt` to ensure all packages are installed. |
 
 ---
 
