@@ -10,11 +10,3 @@ env/
 
 # Streamlit
 .streamlit/secrets.toml
-
-# IDEs
-.vscode/
-.idea/
-
-# OS generated files
-.DS_Store
-Thumbs.db
