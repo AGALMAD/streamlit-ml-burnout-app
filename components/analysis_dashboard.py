@@ -28,10 +28,10 @@ def render_analysis(model, user_input, analyze_btn):
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=burnout_risk,
-            number={"suffix": "%"},
-            title={"text": "Burnout Risk"},
+            number={"suffix": "%", "font": {"color": "white"}},
+            title={"text": "Burnout Risk", "font": {"color": "white"}},
             gauge={
-                "axis": {"range": [0, 100]},
+                "axis": {"range": [0, 100], "tickfont": {"color": "white"}},
                 "bar": {"color": "#3498db"},
                 "steps": [
                     {"range": [0, 40], "color": "#2ecc71"},
@@ -45,7 +45,7 @@ def render_analysis(model, user_input, analyze_btn):
             height=240,
             margin=dict(l=20, r=20, t=40, b=20),
             paper_bgcolor="rgba(0,0,0,0)",
-            font={"color": "#2c3e50"}
+            font={"color": "#ffffff"}
         )
 
         st.plotly_chart(fig, use_container_width=True)
