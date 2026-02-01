@@ -4,4 +4,4 @@ scikit-learn
 joblib
 numpy
 plotly
-ollama
+groq
