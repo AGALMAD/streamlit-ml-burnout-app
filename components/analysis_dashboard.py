@@ -69,14 +69,11 @@ def render_analysis(model, user_input, analyze_btn):
         fig.update_traces(value=burnout_risk)
         chart_placeholder.plotly_chart(fig, use_container_width=True)
 
-        st.markdown("---")
+        st.divider()
 
         if burnout_risk < 40:
             st.success("🟢 **Low risk of burnout**")
-            st.write("Linguistic patterns indicate a healthy and balanced state.")
         elif burnout_risk < 75:
             st.warning("🟡 **Moderate risk of burnout**")
-            st.write("Some stress indicators detected.")
         else:
             st.error("🔴 **High risk of burnout**")
-            st.write("Strong linguistic signals detected.")
