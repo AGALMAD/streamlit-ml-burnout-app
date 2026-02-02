@@ -58,11 +58,15 @@ def render_analysis(model, user_input, analyze_btn):
         if "last_risk" not in st.session_state or st.session_state.last_risk != burnout_risk:
             st.session_state.last_risk = burnout_risk
             current_val = 0
-            while current_val <= target_value:
+            # Optimize animation: rising slowly and smoothly
+            total_frames = 45 
+            step = max(0.5, target_value / total_frames)
+            
+            while current_val < target_value:
                 fig.update_traces(value=current_val)
                 chart_placeholder.plotly_chart(fig, use_container_width=True)
                 current_val += step
-                time.sleep(0.01)
+                time.sleep(0.02) # Slower updates for visual effect
         
 
         fig.update_traces(value=burnout_risk)
