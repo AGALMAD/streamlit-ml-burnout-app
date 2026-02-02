@@ -1,15 +1,15 @@
-# 🧠 MindGuard AI
+#  MindGuard AI
 
 **MindGuard AI** is an intelligent application designed to detect early signs of professional burnout through natural language analysis. Using Machine Learning models and Generative AI, the tool provides real-time risk assessment and personalized wellness recommendations.
 
-## ✨ Key Features
+##  Key Features
 
-- **�️ Burnout Detection**: Analyzes user text input to predict the probability of burnout using a trained Scikit-learn model.
-- **📊 Interactive Dashboard**: Visualizes risk levels with dynamic gauges and trend indicators using Plotly.
-- **🤖 AI Chatbot Assistant**: A supportive chat interface powered by **Groq** (LLM) to offer advice, coping strategies, and empathetic conversation.
-- **🌗 Dark/Light Mode Support**: Optimised UI that adapts seamlessly to your system theme.
+- ** Burnout Detection**: Analyzes user text input to predict the probability of burnout using a trained Scikit-learn model.
+- ** Interactive Dashboard**: Visualizes risk levels with dynamic gauges and trend indicators using Plotly.
+- ** AI Chatbot Assistant**: A supportive chat interface powered by **Groq** (LLM) to offer advice, coping strategies, and empathetic conversation.
+- ** Dark/Light Mode Support**: Optimised UI that adapts seamlessly to your system theme.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend**: [Streamlit](https://streamlit.io/)
 - **Machine Learning**: Scikit-learn, Pandas, NumPy
@@ -17,7 +17,7 @@
 - **LLM/AI**: Groq API
 - **Language**: Python 3.10+
 
-## � Installation & Setup
+##  Installation & Setup
 
 Follow these steps to set up the project locally:
 
@@ -43,7 +43,7 @@ This project requires a **Groq API Key** for the chatbot functionality.
    GROQ_API_KEY = "gsk_..."
    ```
 
-## 🖥️ Usage
+##  Usage
 
 Run the Streamlit application with the following command:
 
@@ -53,7 +53,7 @@ streamlit run streamlit_app.py
 
 The app will open automatically in your browser at `http://localhost:8501`.
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 streamlit-ml-burnout-app/
