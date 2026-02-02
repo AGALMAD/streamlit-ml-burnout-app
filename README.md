@@ -2,6 +2,8 @@
 
 **MindGuard AI** is an intelligent application designed to detect early signs of professional burnout through natural language analysis. Using Machine Learning models and Generative AI, the tool provides real-time risk assessment and personalized wellness recommendations.
 
+# [Web App](https://agalmad-streamlit-ml-burnout-app-streamlit-app-develop-b14kru.streamlit.app/)
+
 # [Model Code](https://colab.research.google.com/drive/1g4TgEyQ3xQMwWzLuG-ZPpmNntL6Iflrj?usp=sharing)
 
 # [Explanatory Video](https://youtu.be/cxrPAa1c2c4)
