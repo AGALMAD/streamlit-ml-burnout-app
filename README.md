@@ -4,10 +4,10 @@
 
 ##  Key Features
 
-- ** Burnout Detection**: Analyzes user text input to predict the probability of burnout using a trained Scikit-learn model.
-- ** Interactive Dashboard**: Visualizes risk levels with dynamic gauges and trend indicators using Plotly.
-- ** AI Chatbot Assistant**: A supportive chat interface powered by **Groq** (LLM) to offer advice, coping strategies, and empathetic conversation.
-- ** Dark/Light Mode Support**: Optimised UI that adapts seamlessly to your system theme.
+- **Burnout Detection**: Analyzes user text input to predict the probability of burnout using a trained Scikit-learn model.
+- **Interactive Dashboard**: Visualizes risk levels with dynamic gauges and trend indicators using Plotly.
+- **AI Chatbot Assistant**: A supportive chat interface powered by **Groq** (LLM) to offer advice, coping strategies, and empathetic conversation.
+- **Dark/Light Mode Support**: Optimised UI that adapts seamlessly to your system theme.
 
 ##  Tech Stack
 
