@@ -1,101 +1,68 @@
 # 🧠 MindGuard AI
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://streamlit.io)
-![Python](https://img.shields.io/badge/Python-3.9%2B-blue)
-![Groq](https://img.shields.io/badge/Groq-AI-f55036)
+**MindGuard AI** is an intelligent application designed to detect early signs of professional burnout through natural language analysis. Using Machine Learning models and Generative AI, the tool provides real-time risk assessment and personalized wellness recommendations.
 
-**MindGuard AI** is a workplace stress analysis tool that bridges the gap between traditional machine learning and generative AI. It combines linguistic analysis to detect burnout risks with an empathetic AI assistant to provide actionable wellness tips.
+## ✨ Key Features
 
----
-
-## ✨ Features
-
-- **📊 Linguistic Analysis**: Detects probability of burnout based on text sentiment and keyword patterns using a trained scikit-learn model.
-- **🤖 AI Wellness Assistant**: Powered by **Groq** (Llama 3), this assistant provides instant, actionable advice tailored to your needs.
-- **⚡ Fast Inference**: Utilizes Groq's LPU™ Inference Engine for near-instantaneous responses.
+- **�️ Burnout Detection**: Analyzes user text input to predict the probability of burnout using a trained Scikit-learn model.
+- **📊 Interactive Dashboard**: Visualizes risk levels with dynamic gauges and trend indicators using Plotly.
+- **🤖 AI Chatbot Assistant**: A supportive chat interface powered by **Groq** (LLM) to offer advice, coping strategies, and empathetic conversation.
+- **🌗 Dark/Light Mode Support**: Optimised UI that adapts seamlessly to your system theme.
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Streamlit
-- **ML Engine**: Scikit-learn (Pipeline with TF-IDF & Logistic Regression)
-- **GenAI**: Groq API (Llama-3.3-70b-versatile)
-- **Visualization**: Plotly
+- **Frontend**: [Streamlit](https://streamlit.io/)
+- **Machine Learning**: Scikit-learn, Pandas, NumPy
+- **Visualization**: Plotly Graph Objects
+- **LLM/AI**: Groq API
+- **Language**: Python 3.10+
 
----
+## � Installation & Setup
 
-## 📋 Prerequisites
-
-Before you begin, ensure you have:
-
-1. **Python 3.9+** installed.
-2. A **[Groq API Key](https://console.groq.com/keys)**.
-
----
-
-## 🚀 Setup Guide
+Follow these steps to set up the project locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone <https://github.com/AGALMAD/streamlit-ml-burnout-app>
+git clone https://github.com/AGALMAD/streamlit-ml-burnout-app.git
 cd streamlit-ml-burnout-app
 ```
 
 ### 2. Install Dependencies
-It is recommended to use a virtual environment:
-```bash
-python -m venv venv
-# Windows
-.\venv\Scripts\activate
-# Mac/Linux
-source venv/bin/activate
-```
-
-Install the required packages:
+Ensure you have Python installed. It is recommended to use a virtual environment.
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configure Secrets
-Create a `.streamlit/secrets.toml` file in the root directory and add your Groq API key:
+### 3. Configure API Keys
+This project requires a **Groq API Key** for the chatbot functionality.
+1. Create a `.streamlit` folder in the root directory if it doesn't exist.
+2. Create a `secrets.toml` file inside it:
+3. Add your API key:
+   ```toml
+   # .streamlit/secrets.toml
+   GROQ_API_KEY = "gsk_..."
+   ```
 
-**File:** `.streamlit/secrets.toml`
-```toml
-GROQ_API_KEY = "gsk_..."
-```
+## 🖥️ Usage
 
-> **Note:** Do not commit this file to version control.
+Run the Streamlit application with the following command:
 
-### 4. Run the Application
 ```bash
 streamlit run streamlit_app.py
 ```
 
----
+The app will open automatically in your browser at `http://localhost:8501`.
 
-## 💻 Usage
+## 📂 Project Structure
 
-1. Open your browser to `http://localhost:8501`.
-2. **Left Panel**: View the project title and mission.
-3. **Center Panel (Analysis)**: 
-   - Type or paste descriptive text about your workday/feelings.
-   - Click **Start Analysis** to get a burnout risk score.
-4. **Right Panel (Assistant)**: 
-   - Click the **💬 Open Wellness Assistant** button.
-   - Chat with the AI to get stress relief tips (e.g., "Give me a 5-minute breathing exercise").
-
----
-
-## ⚠️ Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| **Missing API Key** | Ensure you have created `.streamlit/secrets.toml` with the correct `GROQ_API_KEY`. |
-| **Model Not Found** | Verify `modelo_burnout_pipeline.pkl` exists in the `models/` directory or root, depending on your structure. |
-| **Dependencies** | Run `pip install -r requirements.txt` to ensure all packages are installed. |
-
----
-
-
-<div align="center">
-    <i>MindGuard AI - Decoding Workplace Stress through Linguistic Intelligence</i>
-</div>
+```
+streamlit-ml-burnout-app/
+├── components/          # UI Components (Header, Footer, Chatbot, etc.)
+├── models/              # Pre-trained ML models (.pkl files)
+├── services/            # Logic for predictions and backend services
+├── styles/              # CSS files for custom styling
+├── .streamlit/          # Configuration and secrets (gitignored)
+├── streamlit_app.py     # Main application entry point
+├── requirements.txt     # Python dependencies
+└── README.md            # Project documentation
+```
